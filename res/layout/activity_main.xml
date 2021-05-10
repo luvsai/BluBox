@@ -12,12 +12,39 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginBottom="10dp"
-        android:scrollbars="vertical">
+        android:scrollbars="vertical"
+        app:layout_constraintBottom_toTopOf="@id/view2">
 
 
     </androidx.recyclerview.widget.RecyclerView>
 
+    <View
+        android:id="@+id/view"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="#EFC1FB"
+        app:layout_constraintBottom_toBottomOf="@+id/textView"/>
 
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:gravity="center_horizontal"
+        android:text="BluBox"
+        android:textColor="#454545"
+        android:textSize="18dp"
+        app:layout_constraintBottom_toBottomOf="@id/list"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <View
+        android:id="@+id/view2"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="#EFC1FB"
+        app:layout_constraintBottom_toTopOf="@id/textView" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

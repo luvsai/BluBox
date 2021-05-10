@@ -15,12 +15,15 @@ import java.util.ArrayList;
 public class ServiceAdapter extends RecyclerView.Adapter<ServiceAdapter.ViewHolder> {
     ItemClicked context;
 
-    ArrayList<Service> services;
     public interface ItemClicked {
         void onItemClicked(int index, ArrayList<Service> services) ;
         void onImgClicked(int index, ArrayList<Service> services) ;
 
     }
+
+
+    ArrayList<Service> services;
+
     public ServiceAdapter(ArrayList<Service> services , Context context) {
         this.services = services;
         this.context = (ItemClicked) context;

@@ -1,6 +1,7 @@
 package com.example.blubox;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
@@ -56,6 +57,9 @@ public class MainActivity extends AppCompatActivity implements ServiceAdapter.It
 
     RecyclerView.LayoutManager layoutmanager;
 
+
+    RecyclerView.Adapter myAdapter;
+
     ArrayList<Service> services ;
 
 
@@ -66,6 +70,40 @@ public class MainActivity extends AppCompatActivity implements ServiceAdapter.It
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        services = new ArrayList<Service>() ;
+
+
+        //Hardcoding services details
+        // services 1.TO DO  list 2.Notes 3.Personal Blog 4.Gallery
+
+        services.add(new Service("Todo List","ToDoList.class","logo","No pending tasks" ,"00:00"));
+        services.add(new Service("Notes","Notes.class","logo","Recent notes Title" ,"00:00"));
+        services.add(new Service("Blog","Blog.class","logo","recent Blog Title" ,"00:00"));
+        services.add(new Service("Gallery","Gallery.class","logo","personal photos" ,"00:00"));
+
+
+
+
+
+        recyclerView = findViewById(R.id.list);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(MainActivity.this, LinearLayoutManager.VERTICAL, false) );
+        registerForContextMenu(recyclerView);
+        myAdapter = new ServiceAdapter(services, MainActivity.this);
+
+
+
+
+
+
+        recyclerView.setAdapter(myAdapter);
+
+
+
+
+
+
     }
 
 

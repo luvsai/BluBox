@@ -8,6 +8,9 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.ImageView;
 
 
 /*
@@ -46,6 +49,8 @@ public class SplashScreen extends AppCompatActivity {
 
     // Splash screen timer
     private static int SPLASH_TIME_OUT = 3000;
+    Animation animation1 ;
+    ImageView imgLogo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,19 +61,31 @@ public class SplashScreen extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
         getSupportActionBar().hide();
 
-        //-------------
         setContentView(R.layout.activity_splash_screen);
+
+        animation1 =
+                AnimationUtils.loadAnimation(getApplicationContext(),
+                        R.anim.fade);
+        imgLogo = findViewById(R.id.imgLogo);
+
+        imgLogo.startAnimation(animation1);
 
         /*
          * Showing splash screen with a timer.
          */
         new Handler().postDelayed((Runnable) () -> {
             // This method will be executed once the timer is over
-            // Starting an intent to MainActivity
-            Intent i = new Intent(SplashScreen.this, MainActivity.class);
+            // Starting an intent to MainAactivity
+            String MainActivityPath = "com.example.blubox.MainActivity" ;
+            Intent i = null;
+            try {
+                i = new Intent(SplashScreen.this, Class.forName(MainActivityPath));
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            }
             startActivity(i);
 
-            // closing this activity
+            // closing this activity when returned from the MainActivity
             finish();
         }, SPLASH_TIME_OUT);
 

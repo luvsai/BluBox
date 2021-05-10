@@ -9,11 +9,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.BluBox">
-        <activity
-            android:name=".test"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:label="@string/title_activity_test"
-            android:theme="@style/Theme.BluBox.Fullscreen"></activity>
+
         <!-- Splash screen -->
         <activity
             android:name=".SplashScreen"
