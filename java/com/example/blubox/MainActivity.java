@@ -69,16 +69,9 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity implements ServiceAdapter.ItemClicked {
 
     RecyclerView recyclerView;
-
     RecyclerView.LayoutManager layoutmanager;
-
-
     RecyclerView.Adapter myAdapter;
-
     ArrayList<Service> services ;
-
-
-
 
 
     @Override
@@ -90,13 +83,30 @@ public class MainActivity extends AppCompatActivity implements ServiceAdapter.It
         getSupportActionBar().hide(); //Hiding Action BAr
 
         /*
-        Adding user name and bio manually for testing multiple adapter recycler view
+            * Adding user name and bio for the  multiple adapter recycler view
+            * USer data is stored in shared Preference storage and accessible for entire app
+            * Class userbio.java has Functions to retreive the user data
          */
+        userbio dat = new userbio(MainActivity.this); //class userbio.java helps to retreive  user data from shared preference storage
+        String username, bio, profileUrl ,editprofileurl;
+        username = dat.getName() ;
+        bio = dat.getBio() ;
+        profileUrl = "ic_launcher_round" ; //Profile pic system is not updated yet
+        editprofileurl =  "Userdata" ; // Userdata.java - class path for editing the user data
 
-        services.add(new Service(0,"_.chaitra.__","UserBio",getMipmapImgRes("ic_launcher_round"),"विहाय कामान्यः सर्वान्पुमांश्चरति निःस्पृहः। निर्ममो निरहङ्कारः स शान्तिमधिगच्छति॥" ,""));
+
 
         /*
-            Service class id = 1 for the Services_template card in recycler view
+            * Adding user data to create the user bio template in Home screen
+            * id = 0 represents the userdata Service object in the Arraylist services for user_bio_template.xml card.
+            * the ServiceAdapter class will
+
+         */
+
+        services.add(new Service(0,username,editprofileurl,getMipmapImgRes(profileUrl),bio ,""));
+
+        /*
+            Service class id = 1 for the Services_template.xml card in recycler view
 
             Hardcoding services details and adding them to the services array list
             services 1.TO_DO  list 2.Notes 3.Personal Blog 4.Gallery
@@ -104,24 +114,31 @@ public class MainActivity extends AppCompatActivity implements ServiceAdapter.It
 
         */
 
-        services.add(new Service(1,"Todo List","ToDoList",getImgRes("todo1"),"Create tasks" ,""));
-        services.add(new Service(1,"Notes","Notes",getImgRes("notes"),"Create notes " ,""));
-        services.add(new Service(1,"Blog","Blog",getImgRes("blog"),"Write Blog" ,""));
-        services.add(new Service(1,"Gallery","Gallery",getImgRes("memories"),"Safe" ,""));
+        services.add(new Service(1,"Todo List","services_list.ToDoList",getImgRes("todo1"),"Create Activity and set of  tasks  in it and complete tasks" ,""));
+        services.add(new Service(1,"Notes","services_list.Notes",getImgRes("notes"),"Create notes " ,""));
+        services.add(new Service(1,"Blog","services_list.Blog",getImgRes("blog"),"Write Blog" ,""));
+        services.add(new Service(1,"Gallery","services_list.Gallery",getImgRes("memories"),"Safe" ,""));
 
 
 
 
         /*
-        Linking data to Recycler view UI
+            * Linking data to Recycler view UI
+            * Check ServiceAdapter.java class for detailed code to integrate the data with Views in Recycler view
+
          */
 
 
         recyclerView = findViewById(R.id.list);
         recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(MainActivity.this, LinearLayoutManager.VERTICAL, false) );//for vertical scrolling
+
+        //for vertical scrolling
+        recyclerView.setLayoutManager(new LinearLayoutManager(MainActivity.this, LinearLayoutManager.VERTICAL, false) );
         registerForContextMenu(recyclerView);
-        myAdapter = new ServiceAdapter(services, MainActivity.this); // creating adapter object with the services data
+
+        // creating adapter object with the services data
+        myAdapter = new ServiceAdapter(services, MainActivity.this);
+
         recyclerView.setAdapter(myAdapter); //sending the adapter to recyclerView
 
 
@@ -134,13 +151,13 @@ public class MainActivity extends AppCompatActivity implements ServiceAdapter.It
 
 
     /*
-        the following function is called when service card is selected
+        the following function implemented by the current class is called when service card is selected
      */
     @Override
     public void onItemClicked(int index, ArrayList<Service> services) {
 
 
-        String MainActivityPath = "com.example.blubox.services_list." + services.get(index).getService_Activity() ;
+        String MainActivityPath = "com.example.blubox." + services.get(index).getService_Activity() ;
         Intent i = null;
         try {
             i = new Intent(MainActivity.this, Class.forName(MainActivityPath));
@@ -161,7 +178,7 @@ public class MainActivity extends AppCompatActivity implements ServiceAdapter.It
 
 
     /*
-    Function to get Drawable image resource from the image image name
+    Function to get Drawable image resource from the image name in drawable folder
      */
 
     public Drawable getImgRes(String name) {
@@ -175,6 +192,11 @@ public class MainActivity extends AppCompatActivity implements ServiceAdapter.It
         return res ;
 
     }
+
+    /*
+    Function to get Drawable image resource from the image name in mipmap  folder
+     */
+
     public Drawable getMipmapImgRes(String name) {
 
         String uri = "@mipmap/"+name;  // where myresource (without the extension) is the file

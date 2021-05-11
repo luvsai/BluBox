@@ -18,13 +18,25 @@ import android.widget.ImageView;
  *Documentation:------------------------------
 
     *Name: SplashScreen.java (Activity)
+            activity_splash_screen.xml (for layout)
 
     *Description :-----------
-        ->This is the first screen of the app
+        ->This is the first Displayed Actvity of the app
         ->it displays the app logo and name of the app for a Splash_time_out (3secs)
 
 
     *Functionalities(FN):----------
+
+
+        *FN1 :
+         Check the User Status for new user and redirect the user to update his profile to
+         Userdata.java Activity
+
+        *Approach
+            the code will use the getStatus() function of class userbio.java which gives the status of user
+            it return false if user is a new user
+
+
 
       *FN1 :
          Display the app  logo for a 3 Secs and redirect to MainActivity
@@ -52,6 +64,8 @@ public class SplashScreen extends AppCompatActivity {
     Animation animation1 ;
     ImageView imgLogo;
 
+    String Destination ;// Variable to store the Destination activity to redirect User From Current Activity
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,34 +77,72 @@ public class SplashScreen extends AppCompatActivity {
 
         setContentView(R.layout.activity_splash_screen);
 
+        /*
+        Animation for logo in splash screen
+         */
+
         animation1 =
                 AnimationUtils.loadAnimation(getApplicationContext(),
                         R.anim.fade);
         imgLogo = findViewById(R.id.imgLogo);
-
         imgLogo.startAnimation(animation1);
 
-        /*
-         * Showing splash screen with a timer.
-         */
-        new Handler().postDelayed((Runnable) () -> {
-            // This method will be executed once the timer is over
-            // Starting an intent to MainAactivity
-            String MainActivityPath = "com.example.blubox.MainActivity" ;
-            Intent i = null;
-            try {
-                i = new Intent(SplashScreen.this, Class.forName(MainActivityPath));
-            } catch (ClassNotFoundException e) {
-                e.printStackTrace();
-            }
-            startActivity(i);
 
-            // closing this activity when returned from the MainActivity
-            finish();
-        }, SPLASH_TIME_OUT);
+        /*
+            * Code to check if User is new User or not
+            * the userbio class uses Shared preferences to store user bio details
+            * it returns false incase the userdata is not updated
+         */
+        userbio dat = new userbio(SplashScreen.this);
+        String status = dat.getStatus();
+
+        Destination = "com.example.blubox.MainActivity" ; //Path for the nextActivity to reDirect userby default the MainActivity (old user)
+
+        if (status.equals("false")) {
+            /*
+             * The user is a new user
+             * Change the Destination path for to Redirect the User to update his profile to Activity (UserData.java).
+             */
+            Destination = "com.example.blubox.Userdata";
+
+        }
+
+
+        /*
+        * Showing splash screen with a timer and Redirect the User
+        * to the Next Activity
+        *   Case "newUser" :  Destination is Userdata.java(Activity)
+        *   Case "oldUser" :  Destination is MainActivity.jav(Activity) (redirect to app Home)
+        */
+
+        new Handler().postDelayed((Runnable) () -> {
+                /*
+                    * This method will be executed once the timer is over
+
+                    * Starting an intent to Activity specified in Destination variable
+
+
+                 */
+                Intent i = null;
+                try {
+                    i = new Intent(SplashScreen.this, Class.forName(Destination));
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                }
+                startActivity(i);
+
+                // closing this activity when returned from the MainActivity
+                finish();
+            }, SPLASH_TIME_OUT);
+
+
+
+        }
+
+
+
 
 
 
 
     }
-}
