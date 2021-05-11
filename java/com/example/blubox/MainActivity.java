@@ -1,5 +1,6 @@
 package com.example.blubox;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -7,7 +8,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
+import android.widget.AbsListView;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -68,10 +72,14 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements ServiceAdapter.ItemClicked {
 
+    int backButtonCount = 0;
     RecyclerView recyclerView;
     RecyclerView.LayoutManager layoutmanager;
     RecyclerView.Adapter myAdapter;
     ArrayList<Service> services ;
+    String username, bio, profileUrl ,editprofileurl;
+    userbio dat ;
+    ImageView propic;
 
 
     @Override
@@ -79,7 +87,7 @@ public class MainActivity extends AppCompatActivity implements ServiceAdapter.It
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        services = new ArrayList<Service>() ;
+
         getSupportActionBar().hide(); //Hiding Action BAr
 
         /*
@@ -87,15 +95,17 @@ public class MainActivity extends AppCompatActivity implements ServiceAdapter.It
             * USer data is stored in shared Preference storage and accessible for entire app
             * Class userbio.java has Functions to retreive the user data
          */
-        userbio dat = new userbio(MainActivity.this); //class userbio.java helps to retreive  user data from shared preference storage
-        String username, bio, profileUrl ,editprofileurl;
+         dat = new userbio(MainActivity.this); //class userbio.java helps to retreive  user data from shared preference storage
+
+        propic = findViewById(R.id.profilepic) ;
+
         username = dat.getName() ;
         bio = dat.getBio() ;
-        profileUrl = "ic_launcher_round" ; //Profile pic system is not updated yet
+        profileUrl = dat.getPhoto() ; //Profile pic Uri
         editprofileurl =  "Userdata" ; // Userdata.java - class path for editing the user data
 
 
-
+        services = new ArrayList<Service>() ;
         /*
             * Adding user data to create the user bio template in Home screen
             * id = 0 represents the userdata Service object in the Arraylist services for user_bio_template.xml card.
@@ -103,7 +113,7 @@ public class MainActivity extends AppCompatActivity implements ServiceAdapter.It
 
          */
 
-        services.add(new Service(0,username,editprofileurl,getMipmapImgRes(profileUrl),bio ,""));
+        services.add(new Service(0,username,editprofileurl,getImgRes("logo"),bio ,"",profileUrl));
 
         /*
             Service class id = 1 for the Services_template.xml card in recycler view
@@ -114,10 +124,10 @@ public class MainActivity extends AppCompatActivity implements ServiceAdapter.It
 
         */
 
-        services.add(new Service(1,"Todo List","services_list.ToDoList",getImgRes("todo1"),"Create Activity and set of  tasks  in it and complete tasks" ,""));
-        services.add(new Service(1,"Notes","services_list.Notes",getImgRes("notes"),"Create notes " ,""));
-        services.add(new Service(1,"Blog","services_list.Blog",getImgRes("blog"),"Write Blog" ,""));
-        services.add(new Service(1,"Gallery","services_list.Gallery",getImgRes("memories"),"Safe" ,""));
+        services.add(new Service(1,"Todo List","services_list.ToDoList",getImgRes("todo1"),"Create Activity and set of  tasks  in it and complete tasks" ,"",""));
+        services.add(new Service(1,"Notes","services_list.Notes",getImgRes("notes"),"Create notes " ,"",""));
+        services.add(new Service(1,"Blog","services_list.Blog",getImgRes("blog"),"Write Blog" ,"",""));
+        services.add(new Service(1,"Gallery","services_list.Gallery",getImgRes("memories"),"Safe" ,"",""));
 
 
 
@@ -142,6 +152,39 @@ public class MainActivity extends AppCompatActivity implements ServiceAdapter.It
         recyclerView.setAdapter(myAdapter); //sending the adapter to recyclerView
 
 
+        /*
+        Scroll listener on recycler view
+         */
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                if (dy > 0) {
+                    // Scrolling up
+                   // propic.getLayoutParams().height -= dy; // OR
+                   // propic.getLayoutParams().width -= dy;
+                    //Toast.makeText( MainActivity.this,String.valueOf(dy) , Toast.LENGTH_SHORT).show();
+                } else {
+                    // Scrolling down
+                }
+            }
+
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+
+                if (newState == AbsListView.OnScrollListener.SCROLL_STATE_FLING) {
+                    // Do something
+                } else if (newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL) {
+                    // Do something
+                } else {
+                    // Do something
+                }
+            }
+        });
+
+
 
 
 
@@ -156,6 +199,10 @@ public class MainActivity extends AppCompatActivity implements ServiceAdapter.It
     @Override
     public void onItemClicked(int index, ArrayList<Service> services) {
 
+
+        /*
+        Directs the uer to respectiv activity
+         */
 
         String MainActivityPath = "com.example.blubox." + services.get(index).getService_Activity() ;
         Intent i = null;
@@ -212,12 +259,79 @@ public class MainActivity extends AppCompatActivity implements ServiceAdapter.It
 
 
     /*
-        Exit app on back pressed
-     */
-    public void onBackPressed() {
-        finish();
+        Exit app on back pressed twice
+     */ @Override
+
+    public void onBackPressed()
+    {
+        if(backButtonCount >= 1)
+        {
+            Intent intent = new Intent(Intent.ACTION_MAIN);
+            intent.addCategory(Intent.CATEGORY_HOME);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+        }
+        else
+        {
+            Toast.makeText(this, "Press the back button once again to close the application.", Toast.LENGTH_SHORT).show();
+            backButtonCount++;
+        }
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        username = dat.getName() ;
+        bio = dat.getBio() ;
+        profileUrl = dat.getPhoto() ; //Profile pic Uri
+        editprofileurl =  "Userdata" ;
+
+        services = new ArrayList<Service>() ;
+        /*
+         * Adding user data to create the user bio template in Home screen
+         * id = 0 represents the userdata Service object in the Arraylist services for user_bio_template.xml card.
+         * the ServiceAdapter class will
+
+         */
+
+        services.add(new Service(0,username,editprofileurl,getImgRes("logo"),bio ,"",profileUrl));
+
+        /*
+            Service class id = 1 for the Services_template.xml card in recycler view
+
+            Hardcoding services details and adding them to the services array list
+            services 1.TO_DO  list 2.Notes 3.Personal Blog 4.Gallery
+
+
+        */
+
+        services.add(new Service(1,"Todo List","services_list.ToDoList",getImgRes("todo1"),"Create Activity and set of  tasks  in it and complete tasks" ,"",""));
+        services.add(new Service(1,"Notes","services_list.Notes",getImgRes("notes"),"Create notes " ,"",""));
+        services.add(new Service(1,"Blog","services_list.Blog",getImgRes("blog"),"Write Blog" ,"",""));
+        services.add(new Service(1,"Gallery","services_list.Gallery",getImgRes("memories"),"Safe" ,"",""));
+
+
+
+        //Refreshing the layout
+        myAdapter = new ServiceAdapter(services, MainActivity.this);
+
+        recyclerView.setAdapter(myAdapter); //sending the adapter to recyclerView
+
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            //Refreshing the layout
+            myAdapter = new ServiceAdapter(services, MainActivity.this);
+
+            recyclerView.setAdapter(myAdapter); //sending the adapter to recyclerView
+
+        }
+    }
 
 
 

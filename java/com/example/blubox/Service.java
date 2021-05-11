@@ -12,16 +12,17 @@ import android.graphics.drawable.Drawable;
 
 public class Service {
     private  int id ;
-    private String service_Name, service_Activity, service_Msg,  time;
+    private String service_Name, service_Activity, service_Msg,  time,imguri;
     private Drawable img ;
 
-    public Service( int id ,String service_Name ,String service_Activity,Drawable img , String service_Msg,String time) {
+    public Service( int id ,String service_Name ,String service_Activity,Drawable img , String service_Msg,String time,String imguri) {
         this.id = id; //it is used by Service Adapter class to differentiate layouts
         this.service_Name  = service_Name ; //storing the name of the service
         this.service_Activity  = service_Activity ; //storing path tto the service Activity class
         this.img = img; //image location url
         this.service_Msg = service_Msg; //service Desciption
         this.time = time; //last accessed time
+        this.imguri = imguri ;
 
     }
 
@@ -83,5 +84,15 @@ public class Service {
 
     public void setTime(String time) {
         this.time = time;
+    }
+
+
+    //Image Uri for User profile pic
+    public String getImguri() {
+        return imguri;
+    }
+
+    public void setImguri(String imguri) {
+        this.imguri = imguri;
     }
 }

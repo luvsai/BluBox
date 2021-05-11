@@ -3,7 +3,24 @@ package com.example.blubox;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-//Shared Preference class
+
+
+/*
+
+ *Documentation:------------------------------
+
+    *Name: userbio.java (helper class)
+
+
+    *Description :-----------
+        ->Shared Preference class
+        ->it has save method to save the User data in shared preference
+        ->It has required methods to send data which is read from shared prefereces memory.
+
+
+
+*/
+
 public class userbio {
     String Phone = "UserDetails";
     Context context;
@@ -32,6 +49,22 @@ public class userbio {
         editor.commit();
     }
 
+
+    /*
+       * Save image url
+     */
+
+    public void savePhoto(String photo) {
+
+        SharedPreferences sharedPref = context.getSharedPreferences(Phone,Context.MODE_PRIVATE);
+
+        SharedPreferences.Editor editor = sharedPref.edit();
+
+
+        editor.putString("photo", photo);
+
+        editor.commit();
+    }
 
 
 
@@ -118,7 +151,7 @@ public class userbio {
 
 
     /*
-    function to retrieve the Profile pic file name of user
+    function to retrieve the Profile pic uri of user
      */
 
 
@@ -129,7 +162,7 @@ public class userbio {
 
             SharedPreferences sharedPref = context.getSharedPreferences(Phone, Context.MODE_PRIVATE);
 
-            String defaultValue = "";
+            String defaultValue = "logo";
 
             String name = sharedPref.getString("photo", defaultValue);
             return name;

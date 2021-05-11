@@ -1,6 +1,7 @@
 package com.example.blubox;
 
 import android.content.Context;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,20 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
+
+
+
+/*
+
+ *Documentation:------------------------------
+
+    *Name: ServiceAdapter.java (helper class)
+         uses to dynamically link data with the UI view components
+
+         it consists seperate Viewholder classes for various View templates
+*/
+
+
 
 public class ServiceAdapter extends RecyclerView.Adapter {
     ItemClicked context;
@@ -143,7 +158,11 @@ public class ServiceAdapter extends RecyclerView.Adapter {
             itemView.setTag(serve);
             username.setText(serve.getService_Name());
             userbio.setText(serve.getService_Msg());
-            profilepic.setImageDrawable(serve.getImg());
+            if(serve.getImguri().isEmpty()) {
+                profilepic.setImageDrawable(serve.getImg());
+            }else {
+                profilepic.setImageURI(Uri.parse(serve.getImguri()));
+            }
 
             //Function call to take user to edit bio Acivity
 
@@ -212,6 +231,10 @@ public class ServiceAdapter extends RecyclerView.Adapter {
     public int getItemCount() {
         return services.size();
     }
+
+
+
+
 
 
 }
