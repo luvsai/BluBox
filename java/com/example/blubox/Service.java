@@ -8,11 +8,13 @@ package com.example.blubox;
 
  */
 
+import android.graphics.drawable.Drawable;
+
 public class Service {
-    private String service_Name, service_Activity,img , service_Msg,  time;
+    private String service_Name, service_Activity, service_Msg,  time;
+    private Drawable img ;
 
-
-    public Service( String service_Name ,String service_Activity,String img , String service_Msg,String time) {
+    public Service( String service_Name ,String service_Activity,Drawable img , String service_Msg,String time) {
 
         this.service_Name  = service_Name ; //storing the name of the service
         this.service_Activity  = service_Activity ; //storing path tto the service Activity class
@@ -35,6 +37,14 @@ public class Service {
         this.service_Name = service_Name;
     }
 
+    public String getService_Activity() {
+        return service_Activity;
+    }
+
+    public void setService_Activity(String service_Activity) {
+        this.service_Activity = service_Activity;
+    }
+
     //Description of the Service
 
     public String getService_Msg() {
@@ -47,11 +57,11 @@ public class Service {
 
     //Image location for the Service
 
-    public String getImg() {
+    public Drawable getImg() {
         return img;
     }
 
-    public void setImg(String img) {
+    public void setImg(Drawable img) {
         this.img = img;
     }
 

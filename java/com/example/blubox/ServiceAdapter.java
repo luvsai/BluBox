@@ -1,6 +1,8 @@
 package com.example.blubox;
 
 import android.content.Context;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,14 +17,23 @@ import java.util.ArrayList;
 public class ServiceAdapter extends RecyclerView.Adapter<ServiceAdapter.ViewHolder> {
     ItemClicked context;
 
+
+    /*
+        Interface which connects the Main activity and the Service Adapter (Service Card Click)
+        contains functions implemented by MainActivity and function call by methods inside adapter
+
+     */
     public interface ItemClicked {
         void onItemClicked(int index, ArrayList<Service> services) ;
-        void onImgClicked(int index, ArrayList<Service> services) ;
 
     }
 
 
     ArrayList<Service> services;
+
+    /*
+    Constructor for the ServiceAdapter Class
+     */
 
     public ServiceAdapter(ArrayList<Service> services , Context context) {
         this.services = services;
@@ -45,12 +56,7 @@ public class ServiceAdapter extends RecyclerView.Adapter<ServiceAdapter.ViewHold
                     context.onItemClicked(services.indexOf((Service) view.getTag()),services);
                 }
             });
-            img.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    context.onImgClicked(services.indexOf((Service) view.getTag()),services);
-                }
-            });
+
 
 
         }
@@ -63,6 +69,15 @@ public class ServiceAdapter extends RecyclerView.Adapter<ServiceAdapter.ViewHold
         return new ViewHolder(v);
     }
 
+
+
+
+    /*
+    The following function is called for every item in services arraylist
+
+     */
+
+
     @NonNull
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
@@ -70,15 +85,7 @@ public class ServiceAdapter extends RecyclerView.Adapter<ServiceAdapter.ViewHold
         viewHolder.tvName.setText(services.get(i).getService_Name());
         viewHolder.tvMsg.setText(services.get(i).getService_Msg());
         viewHolder.tvTime.setText(services.get(i).getTime());
-        if ( services.get(i).getImg().equals("logo")) {
-            viewHolder.img.setImageResource(R.drawable.logo);
-        }
-        else if ( services.get(i).getImg().equals("")){}else {
-            String url = services.get(i).getImg();
-
-
-
-        }
+        viewHolder.img.setImageDrawable(services.get(i).getImg());
 
 
 
@@ -87,6 +94,10 @@ public class ServiceAdapter extends RecyclerView.Adapter<ServiceAdapter.ViewHold
 
     }
 
+
+    /*
+    return the length of the list (services)
+     */
     @Override
     public int getItemCount() {
         return services.size();
