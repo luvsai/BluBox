@@ -11,17 +11,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.BluBox">
 
+        <!-- ./ -Root folder ....................................................................................... -->
 
-
-        <activity
-            android:name=".Userdata"
-            android:label="@string/title_activity_userdata">
-
-        </activity>
-        <activity
-            android:name=".services_list.ToDoList"
-            android:label="@string/title_activity_to_do_list"
-            android:theme="@style/Theme.BluBox.NoActionBar" /> <!-- Splash screen -->
+        <!-- Launcher activity -->
         <activity
             android:name=".SplashScreen"
             android:configChanges="orientation|keyboardHidden|screenSize"
@@ -34,8 +26,26 @@
             </intent-filter>
         </activity>
 
-        <!-- Main activity -->
+        <!-- Activity to Take user details -->
+        <activity
+            android:name=".Userdata"
+            android:label="@string/title_activity_userdata">
+
+        </activity>
+
+        <!-- HomeScreen Activity (Main activity ) -->
+
         <activity android:name=".MainActivity" />
+
+
+        <!-- ./services_list./            folder for Activities Related to app Services ....................... -->
+        <activity
+            android:name=".services_list.ToDoList"
+            android:label="@string/title_activity_to_do_list"
+            android:theme="@style/Theme.BluBox.NoActionBar" /> <!-- Splash screen -->
+
+
+
     </application>
 
 </manifest>
