@@ -6,6 +6,8 @@
  
  Please begin with SplashScreen.java inside the /java/com/example/blubox/ directory (It is the Launcher Activity)
  
+ Dont Forget to check AppScreenShots folder to view the desig of actually app
+ 
  
  
  
