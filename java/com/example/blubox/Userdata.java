@@ -19,13 +19,38 @@ import com.google.android.material.textfield.TextInputEditText;
 import java.util.ArrayList;
 
 
+
+/*
+
+ *Documentation:------------------------------
+
+    *Name: Userdata.java (Activity)
+          uses res/layout/activity_userdata.xml (Resource file for layout)
+          uses class userbio.java to save user data
+
+
+    *Description :-----------
+        ->This activity is used to edit the user details
+        ->it receives the user data from gui and saves them to shared preferences using
+        ->It redirects the user to MainActivity.java (Activity) after updating the user data
+
+
+
+*/
+
+
+
+
 public class Userdata extends AppCompatActivity {
         Button sub;
         ImageView addpic;
         String status = "false";
         String username,bio, photoUrl = "logo";
-        //private static final int ACTIVITYuserdet = 2 ,ACTIVITYbotnav =3;
 
+
+        private static final int ACTSplashScreen = 0 ,ACTMainActivity =1;
+
+        userbio dat ; //Object which helps to create shared preference storage for user data
 
         EditText etpn ;
         TextInputEditText  ebio;
@@ -36,8 +61,19 @@ public class Userdata extends AppCompatActivity {
             sub = findViewById(R.id.sub);
             addpic = findViewById(R.id.addpic);
 
+            dat = new userbio(Userdata.this) ;//userbio ooject
+
+
+
             etpn =  findViewById(R.id.etpn);
             ebio = findViewById(R.id.ebio);
+
+            /*
+            Filling the User Form with Saved data
+             */
+            etpn.setText(dat.getName());
+            ebio.setText(dat.getBio());
+
             addpic.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -73,9 +109,14 @@ public class Userdata extends AppCompatActivity {
                         status = "true" ; //valid User
 
 
+                        /*
+                        Saving user data in Shared preferences
+                         */
 
-                        userbio dat = new userbio(Userdata.this); //class which helps to create shared preference storage for user data
                         dat.save(status,username, bio,photoUrl); // Saving user data
+
+
+
 
                         String Destination = "com.example.blubox.MainActivity" ;
 

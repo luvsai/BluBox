@@ -161,6 +161,7 @@ public class MainActivity extends AppCompatActivity implements ServiceAdapter.It
         Intent i = null;
         try {
             i = new Intent(MainActivity.this, Class.forName(MainActivityPath));
+            i.putExtra("source","1"); //1 indicates MainActivity
             startActivity(i);
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
@@ -210,6 +211,12 @@ public class MainActivity extends AppCompatActivity implements ServiceAdapter.It
     }
 
 
+    /*
+        Exit app on back pressed
+     */
+    public void onBackPressed() {
+        finish();
+    }
 
 
 

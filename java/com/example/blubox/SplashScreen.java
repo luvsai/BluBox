@@ -126,6 +126,7 @@ public class SplashScreen extends AppCompatActivity {
                 Intent i = null;
                 try {
                     i = new Intent(SplashScreen.this, Class.forName(Destination));
+                    i.putExtra("source","0"); // 0 indicates Splash Screen Activity
                 } catch (ClassNotFoundException e) {
                     e.printStackTrace();
                 }
