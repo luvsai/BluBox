@@ -87,19 +87,27 @@ public class MainActivity extends AppCompatActivity implements ServiceAdapter.It
         setContentView(R.layout.activity_main);
 
         services = new ArrayList<Service>() ;
-        //getSupportActionBar().hide(); //Hiding Action BAr
-
+        getSupportActionBar().hide(); //Hiding Action BAr
 
         /*
+        Adding user name and bio manually for testing multiple adapter recycler view
+         */
+
+        services.add(new Service(0,"_.chaitra.__","UserBio",getMipmapImgRes("ic_launcher_round"),"विहाय कामान्यः सर्वान्पुमांश्चरति निःस्पृहः। निर्ममो निरहङ्कारः स शान्तिमधिगच्छति॥" ,""));
+
+        /*
+            Service class id = 1 for the Services_template card in recycler view
+
             Hardcoding services details and adding them to the services array list
             services 1.TO_DO  list 2.Notes 3.Personal Blog 4.Gallery
 
+
         */
 
-        services.add(new Service("Todo List","ToDoList",getImgRes("todo1"),"Create tasks" ,""));
-        services.add(new Service("Notes","Notes",getImgRes("notes"),"Create notes " ,""));
-        services.add(new Service("Blog","Blog",getImgRes("blog"),"Write Blog" ,""));
-        services.add(new Service("Gallery","Gallery",getImgRes("memories"),"Safe" ,""));
+        services.add(new Service(1,"Todo List","ToDoList",getImgRes("todo1"),"Create tasks" ,""));
+        services.add(new Service(1,"Notes","Notes",getImgRes("notes"),"Create notes " ,""));
+        services.add(new Service(1,"Blog","Blog",getImgRes("blog"),"Write Blog" ,""));
+        services.add(new Service(1,"Gallery","Gallery",getImgRes("memories"),"Safe" ,""));
 
 
 
@@ -167,4 +175,21 @@ public class MainActivity extends AppCompatActivity implements ServiceAdapter.It
         return res ;
 
     }
+    public Drawable getMipmapImgRes(String name) {
+
+        String uri = "@mipmap/"+name;  // where myresource (without the extension) is the file
+
+        int imageResource = getResources().getIdentifier(uri, null, getPackageName());
+
+
+        Drawable res = getResources().getDrawable(imageResource);
+        return res ;
+
+    }
+
+
+
+
+
+
 }

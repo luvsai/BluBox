@@ -11,11 +11,12 @@ package com.example.blubox;
 import android.graphics.drawable.Drawable;
 
 public class Service {
+    private  int id ;
     private String service_Name, service_Activity, service_Msg,  time;
     private Drawable img ;
 
-    public Service( String service_Name ,String service_Activity,Drawable img , String service_Msg,String time) {
-
+    public Service( int id ,String service_Name ,String service_Activity,Drawable img , String service_Msg,String time) {
+        this.id = id; //it is used by Service Adapter class to differentiate layouts
         this.service_Name  = service_Name ; //storing the name of the service
         this.service_Activity  = service_Activity ; //storing path tto the service Activity class
         this.img = img; //image location url
@@ -26,8 +27,16 @@ public class Service {
 
 
 
+    public int getId() {
+        return id;
+    }
 
-    //Name of the Service
+    public void setId(int id) {
+        this.id = id;
+    }
+
+
+//Name of the Service
 
     public String getService_Name() {
         return service_Name;

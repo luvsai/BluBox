@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.blubox">
 
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -9,11 +10,18 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.BluBox">
+
+
+
+        <activity
+            android:name=".Userdata"
+            android:label="@string/title_activity_userdata">
+
+        </activity>
         <activity
             android:name=".services_list.ToDoList"
             android:label="@string/title_activity_to_do_list"
-            android:theme="@style/Theme.BluBox.NoActionBar"></activity>
-        <!-- Splash screen -->
+            android:theme="@style/Theme.BluBox.NoActionBar" /> <!-- Splash screen -->
         <activity
             android:name=".SplashScreen"
             android:configChanges="orientation|keyboardHidden|screenSize"
@@ -24,7 +32,9 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity> <!-- Main activity -->
+        </activity>
+
+        <!-- Main activity -->
         <activity android:name=".MainActivity" />
     </application>
 
