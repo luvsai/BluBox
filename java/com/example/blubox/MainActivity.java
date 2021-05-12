@@ -124,7 +124,7 @@ public class MainActivity extends AppCompatActivity implements ServiceAdapter.It
 
         */
 
-        services.add(new Service(1,"Todo List","services_list.ToDoList",getImgRes("todo1"),"Create Activity and set of  tasks  in it and complete tasks" ,"",""));
+        services.add(new Service(1,"Todo List","services_list.To_do.ToDoList",getImgRes("todo1"),"Create Activity and set of  tasks  in it and complete tasks" ,"",""));
         services.add(new Service(1,"Notes","services_list.Notes",getImgRes("notes"),"Create notes " ,"",""));
         services.add(new Service(1,"Blog","services_list.Blog",getImgRes("blog"),"Write Blog" ,"",""));
         services.add(new Service(1,"Gallery","services_list.Gallery",getImgRes("memories"),"Safe" ,"",""));

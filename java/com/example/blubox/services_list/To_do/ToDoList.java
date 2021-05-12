@@ -24,9 +24,9 @@ import com.example.blubox.R;
 
 
     *Description :-----------
-        ->It will display list of activities
-        Each activity can have 0 or more tasks assigned to it
-        -> User can create a new activity with a title
+        ->It will display list of Quests (activities)
+        Each Quest can have 0 or more tasks assigned to it
+        -> User can create a new Quest with a title. or delete old ones
         - when he clicks the activity card he  is redirted to the tasks activity for that specific activity
 
 
