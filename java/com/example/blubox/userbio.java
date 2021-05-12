@@ -22,7 +22,7 @@ import android.content.SharedPreferences;
 */
 
 public class userbio {
-    String Phone = "UserDetails";
+    String Phone = "UserDetails"; // shared file name
     Context context;
     public userbio(Context context) {
 

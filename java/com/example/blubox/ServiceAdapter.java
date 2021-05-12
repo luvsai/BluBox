@@ -69,10 +69,10 @@ public class ServiceAdapter extends RecyclerView.Adapter {
         Service card = (Service) services.get(position);
 
         if (card.getId() == 0) {
-            // If the current user is the sender of the message
+            // If the card is for displaying bio
             return USER;
         } else {
-            // If some other user sent the message
+            // If card is used for diplaying service
             return SERVICE;
         }
     }
