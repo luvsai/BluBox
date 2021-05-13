@@ -10,6 +10,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.AbsListView;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -209,8 +210,13 @@ public class MainActivity extends AppCompatActivity implements ServiceAdapter.It
         try {
             i = new Intent(MainActivity.this, Class.forName(MainActivityPath));
             i.putExtra("source","1"); //1 indicates MainActivity
+            Log.i("To_do_Activity check","Intent started") ;
+
             startActivity(i);
+            Log.i("To_do_Activity check","Intent failed1") ;
         } catch (ClassNotFoundException e) {
+
+            Log.i("To_do_Activity check","Intent failed2") ;
             e.printStackTrace();
             Toast.makeText(this, "Service  " + services.get(index).getService_Name(), Toast.LENGTH_SHORT).show();
             return ;
@@ -306,7 +312,7 @@ public class MainActivity extends AppCompatActivity implements ServiceAdapter.It
 
         */
 
-        services.add(new Service(1,"Todo List","services_list.ToDoList",getImgRes("todo1"),"Create Activity and set of  tasks  in it and complete tasks" ,"",""));
+        services.add(new Service(1,"Todo List","services_list.To_do.ToDoList",getImgRes("todo1"),"Create Activity and set of  tasks  in it and complete tasks" ,"",""));
         services.add(new Service(1,"Notes","services_list.Notes",getImgRes("notes"),"Create notes " ,"",""));
         services.add(new Service(1,"Blog","services_list.Blog",getImgRes("blog"),"Write Blog" ,"",""));
         services.add(new Service(1,"Gallery","services_list.Gallery",getImgRes("memories"),"Safe" ,"",""));

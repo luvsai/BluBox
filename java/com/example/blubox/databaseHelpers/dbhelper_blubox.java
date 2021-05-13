@@ -206,7 +206,7 @@ public class dbhelper_blubox {
     }
 
 
-    //Function to get table data
+    //Function to get Quest table data
 
     public ArrayList<Quest> getQuestsData()
     {
@@ -224,7 +224,7 @@ public class dbhelper_blubox {
              int qId  =cursor.getInt(cursor.getColumnIndex(myDbHelper.QID));
             String qTitle =cursor.getString(cursor.getColumnIndex(myDbHelper.QTITLE));
             String  qMsg  =cursor.getString(cursor.getColumnIndex(myDbHelper.QMSG));
-            String  qImg  =cursor.getString(cursor.getColumnIndex(myDbHelper.QIMG));
+            String  qImg  =cursor.getString(cursor.getColumnIndex(myDbHelper.QMSG));
             String  qTStamp =cursor.getString(cursor.getColumnIndex(myDbHelper.QTSTAMP));
             int  qTaskCount =cursor.getInt(cursor.getColumnIndex(myDbHelper.QTASKCOUNT));
             int  qReached =cursor.getInt(cursor.getColumnIndex(myDbHelper.QREACHED));
@@ -236,54 +236,73 @@ public class dbhelper_blubox {
     }
 
 
-    public int checkUser(String pno){
+    /*
+        * Function to Update Quest Title updateTitle(QuestID, NEWQuestTitle)
+
+
+     */
+
+
+
+    public int updateTitle(int qId , String qTitle)
+    {
         SQLiteDatabase db = myhelper.getWritableDatabase();
-        String[] columns = {myDbHelper.UID, myDbHelper.NAME, myDbHelper.Phone, myDbHelper.Msg, myDbHelper.Img, myDbHelper.Time};
-        Cursor cursor =db.query(myDbHelper.TABLE_NAME,columns,null,null,null,null,null);
-        StringBuffer buffer= new StringBuffer();
-        while (cursor.moveToNext())
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(myDbHelper.QTITLE,qTitle);
+        String[] whereArgs= {String.valueOf(qId)};
+        int count =db.update(myDbHelper.QUEST_TABLE_NAME,contentValues, myDbHelper.QID+" = ?",whereArgs );
+        return count;
+    }
+
+    /*
+        *Function to update TaskCount : updateTaskCount(QuestId, NewTaskCount)
+     */
+
+
+
+    public int updateTaskCount(int qId , int qTaskCount)
+    {
+
+        SQLiteDatabase db = myhelper.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(myDbHelper.QTASKCOUNT,qTaskCount);
+        String[] whereArgs= {String.valueOf(qId)};
+        int count =db.update(myDbHelper.QUEST_TABLE_NAME,contentValues, myDbHelper.QID+" = ?",whereArgs );
+        return count;
+    }
+
+    /*
+        *Function to  update taskreached
+
+     */
+    public int updateQReached(int qId , int qReached )
+    {
+
+        SQLiteDatabase db = myhelper.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(myDbHelper.QREACHED,qReached); //new data
+        String[] whereArgs= {String.valueOf(qId)};
+        int count =db.update(myDbHelper.QUEST_TABLE_NAME,contentValues, myDbHelper.QID+" = ?",whereArgs );
+        return count;
+    }
+
+        /*
+
+            * Function to delete the Quest
+         */
+        public  int delete(int qId)
         {
-            int cid =cursor.getInt(cursor.getColumnIndex(myDbHelper.UID));
+            SQLiteDatabase db = myhelper.getWritableDatabase();
+            String[] whereArgs ={String.valueOf(qId)};
 
-            String  phone =cursor.getString(cursor.getColumnIndex(myDbHelper.Phone));
-            if (phone.equals(pno)){
-                return 1;
-            }
+            int count =db.delete(myDbHelper.QUEST_TABLE_NAME , myDbHelper.QID+" = ?",whereArgs);
+            return  count;
         }
-        return 0;
-    }
 
 
-    public  int delete(String uname)
-    {
-        SQLiteDatabase db = myhelper.getWritableDatabase();
-        String[] whereArgs ={uname};
-
-        int count =db.delete(myDbHelper.TABLE_NAME , myDbHelper.NAME+" = ?",whereArgs);
-        return  count;
-    }
-
-    public int updateName(String oldName , String newName)
-    {
-        SQLiteDatabase db = myhelper.getWritableDatabase();
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(myDbHelper.NAME,newName);
-        String[] whereArgs= {oldName};
-        int count =db.update(myDbHelper.TABLE_NAME,contentValues, myDbHelper.NAME+" = ?",whereArgs );
-        return count;
-    }
 
 
-    public int updatelastMessage(String mob , String m)
-    {
 
-        SQLiteDatabase db = myhelper.getWritableDatabase();
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(myDbHelper.Msg,m);
-        String[] whereArgs= {mob};
-        int count =db.update(myDbHelper.TABLE_NAME,contentValues, myDbHelper.Phone+" = ?",whereArgs );
-        return count;
-    }
 
 
 
@@ -345,38 +364,6 @@ public class dbhelper_blubox {
         }
         return tasks;
     }
-
-//update seen param
-
-
-    public int updateSeen(int id , int value)
-    {
-
-        SQLiteDatabase db = myhelper.getWritableDatabase();
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(myDbHelper.Seen,value);
-        String[] whereArgs= {Integer.toString(id)};
-        int count =db.update(myDbHelper.MSG_TABLE_NAME,contentValues, myDbHelper.UID+" = ?",whereArgs );
-        return count;
-    }
-
-    public int checkMsg(String did){
-        SQLiteDatabase db = myhelper.getWritableDatabase();
-        String[] columns = {myDbHelper.UID ,myDbHelper.Mid,myDbHelper.NAME, myDbHelper.Phone, myDbHelper.Msg, myDbHelper.Img,myDbHelper.Token,myDbHelper.Seen, myDbHelper.Time};
-        Cursor cursor =db.query(myDbHelper.MSG_TABLE_NAME,columns,null,null,null,null,null);
-        StringBuffer buffer= new StringBuffer();
-        while (cursor.moveToNext())
-        {
-            int cid =cursor.getInt(cursor.getColumnIndex(myDbHelper.UID));
-
-            String  mid =cursor.getString(cursor.getColumnIndex(myDbHelper.Mid));
-            if (mid.equals(did)){
-                return 1;
-            }
-        }
-        return 0;
-    }
-
 
 
 

@@ -18,6 +18,7 @@
         <!-- ./ -Root folder ....................................................................................... -->
 
         <!-- Launcher activity -->
+        <!-- Splash screen -->
         <activity
             android:name=".SplashScreen"
             android:configChanges="orientation|keyboardHidden|screenSize"
@@ -48,7 +49,7 @@
         <activity
             android:name=".services_list.To_do.ToDoList"
             android:label="@string/title_activity_to_do_list"
-            android:theme="@style/Theme.BluBox.NoActionBar" /> <!-- Splash screen -->
+            android:theme="@style/Theme.BluBox.Fullscreen"/>
 
 
 

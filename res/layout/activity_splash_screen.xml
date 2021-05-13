@@ -24,7 +24,7 @@
         android:id="@+id/textView"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="184dp"
+        android:layout_marginBottom="68dp"
         android:gravity="center_horizontal"
         android:text="BluBox"
         android:textColor="#454545"
@@ -33,5 +33,76 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="50dp"
+        android:layout_marginEnd="41dp"
+        android:layout_marginBottom="136dp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.477"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:paddingTop="5dp"
+            app:cardCornerRadius="10dp"
+            app:cardElevation="5dp">
+
+
+            <ImageView
+                android:id="@+id/totalimg"
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:background="#009BD8" />
+        </androidx.cardview.widget.CardView>
+
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="14dp"
+            android:layout_marginTop="2dp"
+            android:paddingTop="5dp"
+            app:cardCornerRadius="10dp"
+            app:cardElevation="5dp">
+
+
+            <ImageView
+                android:id="@+id/doneimg"
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:background="#5AFF83" />
+
+
+        </androidx.cardview.widget.CardView>
+
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="14dp"
+            android:layout_marginTop="2dp"
+            android:paddingTop="5dp"
+            app:cardCornerRadius="10dp"
+            app:cardElevation="5dp">
+
+
+            <ImageView
+                android:id="@+id/waytogoimg"
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:background="#FF3E3E" />
+
+
+        </androidx.cardview.widget.CardView>
+
+
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
