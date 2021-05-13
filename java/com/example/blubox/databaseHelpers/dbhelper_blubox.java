@@ -31,8 +31,6 @@ import java.util.ArrayList;
 
  */
 
-
-
 public class dbhelper_blubox {
 
     myDbHelper myhelper;
@@ -333,16 +331,16 @@ public class dbhelper_blubox {
         {
 
 
-
+            int Qid;
 
             int tId =cursor.getInt(cursor.getColumnIndex(myDbHelper.TID));
-            tQid =cursor.getInt(cursor.getColumnIndex(myDbHelper.QID));
+            Qid =cursor.getInt(cursor.getColumnIndex(myDbHelper.QID));
             String tTitle =cursor.getString(cursor.getColumnIndex(myDbHelper.TTITLE));
             String  tTStamp =cursor.getString(cursor.getColumnIndex(myDbHelper.TTSTAMP));
             int tStatus =cursor.getInt(cursor.getColumnIndex(myDbHelper.TSTATUS));
             String  temp =cursor.getString(cursor.getColumnIndex(myDbHelper.TEMP));
 
-            tasks.add(0, new Task( tId, tQid, tTitle, tTStamp,tStatus, temp ));
+            tasks.add(0, new Task( tId , Qid, tTitle, tTStamp,tStatus, temp ));
 
         }
         return tasks;
