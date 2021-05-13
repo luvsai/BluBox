@@ -8,6 +8,17 @@
  
  Dont Forget to check AppScreenShots folder to view the desig of actually app
  
+ 1 ToDo Lists 
+  *Quest is a set of tasks 
+  *User can Create a new Quest and add tasks to complete in a Quest
+  *User can set task mcomplete and incomplete
+  *user can see his progress in all his Quest.
+  
+  Future Goals :
+      To share quests to friends ... and having fun completing them
+      
+ 2.Remaing features are under development
+ 
  
  
  
