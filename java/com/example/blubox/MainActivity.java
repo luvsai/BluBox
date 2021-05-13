@@ -144,7 +144,7 @@ public class MainActivity extends AppCompatActivity implements ServiceAdapter.It
         recyclerView.setHasFixedSize(true);
 
         //for vertical scrolling
-        recyclerView.setLayoutManager(new LinearLayoutManager(MainActivity.this, LinearLayoutManager.VERTICAL, false) );
+        recyclerView.setLayoutManager(new SpeedyLinearLayoutManager(MainActivity.this, SpeedyLinearLayoutManager.VERTICAL, false) );
         registerForContextMenu(recyclerView);
 
         // creating adapter object with the services data
@@ -287,6 +287,9 @@ public class MainActivity extends AppCompatActivity implements ServiceAdapter.It
     @Override
     protected void onResume() {
         super.onResume();
+
+        //Refreshing layout
+
 
         username = dat.getName() ;
         bio = dat.getBio() ;

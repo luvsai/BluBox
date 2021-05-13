@@ -278,7 +278,7 @@ public class ToDoList extends AppCompatActivity implements  QuestAdapter.QuestCl
 
         // get prompts.xml view
         LayoutInflater li = LayoutInflater.from(context);
-        View promptsView = li.inflate(R.layout.prompt_delete, null);
+        View promptsView = li.inflate(R.layout.prompt_delete, null); //layout for delete prompt
 
 
         builder = new AlertDialog.Builder(
