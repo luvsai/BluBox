@@ -472,6 +472,21 @@ public class dbhelper_blubox {
 
 
 
+    /*
+
+     * Function to delete  Tasks when a Quest is deleted
+     */
+    public  int deleteTasks(int qId)
+    {
+        SQLiteDatabase db = myhelper.getWritableDatabase();
+        String[] whereArgs ={String.valueOf(qId)};
+
+        int count =db.delete(myDbHelper.TASK_TABLE_NAME , myDbHelper.QID+" = ?",whereArgs);
+        return  count;
+    }
+
+
+
 
 
 

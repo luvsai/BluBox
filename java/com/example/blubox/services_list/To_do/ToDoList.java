@@ -303,6 +303,7 @@ public class ToDoList extends AppCompatActivity implements  QuestAdapter.QuestCl
 
 
                                 myDataBaseHelper.delete(deleteQuestID) ;
+                                myDataBaseHelper.deleteTasks(deleteQuestID) ;
 
                                 //Unseting global QuestdeleteId
                                 deleteQuestID = -1 ;
@@ -350,8 +351,8 @@ public class ToDoList extends AppCompatActivity implements  QuestAdapter.QuestCl
 
     @Override
     public void onQuestClicked(int index, ArrayList<Quest> quests) {
-        int qId = quests.get(index).getqId() ;
-        String qTitle = quests.get(index).getqTitle() ;
+        int id = quests.get(index).getqId() ;
+
 
         /*
         Directs the uer to respectiv activity
@@ -361,8 +362,7 @@ public class ToDoList extends AppCompatActivity implements  QuestAdapter.QuestCl
         Intent i = null;
         try {
             i = new Intent(ToDoList.this, Class.forName(TaskActivityPath));
-            i.putExtra("qId",qId);
-            i.putExtra("qTitle",qTitle);
+            i.putExtra("id",String.valueOf(id));
             startActivity(i);
 
         } catch (ClassNotFoundException e) {

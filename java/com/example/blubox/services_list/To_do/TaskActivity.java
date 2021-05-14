@@ -9,10 +9,12 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.example.blubox.R;
 import com.example.blubox.SpeedyLinearLayoutManager;
@@ -66,8 +68,8 @@ public class TaskActivity extends AppCompatActivity implements  TaskAdapter.Task
     RecyclerView.LayoutManager layoutmanager;
     RecyclerView.Adapter myAdapter;
 
-    int qId = -1;
-    String qTitle ;
+    int qId =  2;
+    String qTitle  = "nothing";
 
 
     int deleteTaskID = -1 ; //Used by delete Task Functionality to Find which Task to delete
@@ -88,13 +90,11 @@ public class TaskActivity extends AppCompatActivity implements  TaskAdapter.Task
         try {
 
             //Getting Quest Id from the intent data
-            qId = Integer.parseInt(getIntent().getStringExtra("qId"));
+            qId  = Integer.parseInt(getIntent().getStringExtra("id"));
 
-
-            //Getting Quest Title from the intent data
-            qTitle = getIntent().getStringExtra("qTitle");
 
         }catch (Exception e) {
+            Log.e("QID" ,"Failed") ;
 
         }
 
@@ -170,6 +170,7 @@ public class TaskActivity extends AppCompatActivity implements  TaskAdapter.Task
 
         userbio dat = new userbio(TaskActivity.this);
         String profileUrl = dat.getPhoto() ; //Profile pic Uri
+        String username = dat.getName() ;
 
 
         qTitle = myDataBaseHelper.getQuestsTitle(qId);
@@ -180,16 +181,20 @@ public class TaskActivity extends AppCompatActivity implements  TaskAdapter.Task
 
         taskcount = myDataBaseHelper.getTasksCount(qId) ;
         taskreached = myDataBaseHelper.getTasksReachedCount(qId) ;
-        int percent = (taskcount - taskreached) / taskcount ;
+        double percent = 50;
+        try {
+            percent = Double.valueOf(taskreached) / Double.valueOf(taskcount);
+            percent = percent*100;
+        }catch (Exception e) {}
 
         //
+        int percent1 =  (int) Math.round(percent);
+
+        //Add the TASK Intro Card data  Displaying the TAsk Activity info card at top
+        tasks.add(new Task(-1,qId,qTitle,username,percent1,profileUrl));
 
 
-        //Add the Quest Intro Card data  Displaying the Quest Activity info card at top
-        tasks.add(new Task(-1,qId,qTitle,"",percent,profileUrl));
-
-
-        //Get the data from the Database and append it to the Arrya list
+        //Get the data from the Database and append it to the Array list
         tasks.addAll(myDataBaseHelper.getTasksData(qId));
 
 
@@ -233,6 +238,9 @@ public class TaskActivity extends AppCompatActivity implements  TaskAdapter.Task
 
         final EditText tTitle = (EditText) promptsView
                 .findViewById(R.id.editTextDialogUserInput);
+        TextView tt = (TextView) promptsView
+                .findViewById(R.id.msgal);
+        tt.setText("Name your Task");
 
         // set dialog message
         alertDialogBuilder
@@ -251,7 +259,9 @@ public class TaskActivity extends AppCompatActivity implements  TaskAdapter.Task
 
 
                                 */
-                                myDataBaseHelper.insertTaskData(qId,current.toString(),tTitle.getText().toString(),0,"");
+                                myDataBaseHelper.insertTaskData(qId,tTitle.getText().toString(),current.toString(),0,"");
+                                int tcount = myDataBaseHelper.getTasksCount(qId);
+                                myDataBaseHelper.updateTaskCount(qId,tcount);
 
                             }
                         })
@@ -304,7 +314,13 @@ public class TaskActivity extends AppCompatActivity implements  TaskAdapter.Task
 
         // set prompts.xml to alertdialog builder
 
+
         builder.setView(promptsView);
+
+
+        TextView tt = (TextView) promptsView
+                .findViewById(R.id.delid);
+        tt.setText("Delete the Task");
 
         // set dialog message
 
@@ -317,7 +333,9 @@ public class TaskActivity extends AppCompatActivity implements  TaskAdapter.Task
 
 
                                 myDataBaseHelper.deleteTask(deleteTaskID) ;
-
+                                int tcount = myDataBaseHelper.getTasksCount(qId);
+                                myDataBaseHelper.updateTaskCount(qId,tcount);
+                                myDataBaseHelper.updateQReached(qId,myDataBaseHelper.getTasksReachedCount(qId)) ;
                                 //Unseting global QuestdeleteId
                                 deleteTaskID = -1 ;
                             }
@@ -402,6 +420,21 @@ public class TaskActivity extends AppCompatActivity implements  TaskAdapter.Task
 
     @Override
     public void onTaskClicked(int index, ArrayList<Task> tasks) {
+        int tid = tasks.get(index).gettId() ;
+        int stat = tasks.get(index).gettStatus() ;
+        if (stat == 0) {
+            stat = 1;
+        }else {
+            stat = 0 ;
+        }
+        myDataBaseHelper.updateTStatus(tid,stat) ;
+        myDataBaseHelper.updateQReached(qId,myDataBaseHelper.getTasksReachedCount(qId)) ;
+
+        //Refresh layout
+        refreshLayout();
+
+
+
 
     }
 }

@@ -1,5 +1,6 @@
 package com.example.blubox.services_list.To_do;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.net.Uri;
 import android.view.LayoutInflater;
@@ -144,6 +145,7 @@ public class TaskAdapter extends RecyclerView.Adapter {
     private class IntroHolder extends RecyclerView.ViewHolder  {
         View itemView;
         ImageButton createtask;
+        TextView ttitle , uname;
         ImageView tprofilepic;
         ProgressBar taskprogress;
 
@@ -154,13 +156,20 @@ public class TaskAdapter extends RecyclerView.Adapter {
             createtask = itemView.findViewById(R.id.creatask);
             tprofilepic = itemView.findViewById(R.id.tprofilepic);
             taskprogress =  (ProgressBar) itemView.findViewById(R.id.progressBar) ;
-
+            ttitle = itemView.findViewById(R.id.tquestitle);
+            uname = itemView.findViewById(R.id.uname);
         }
 
         void bind(Task task) {
             itemView.setTag(task);
 
             taskprogress.setProgress(task.gettStatus());
+
+            ttitle.setText(task.gettTitle() + " ("+String.valueOf(task.gettStatus())+ ")" );
+
+            String temp ;
+            temp = uname.getText().toString() ;
+            uname.setText(temp + task.gettTStamp()); //username to the intro card
 
 
             if(task.getTemp().isEmpty()) {
@@ -215,6 +224,7 @@ public class TaskAdapter extends RecyclerView.Adapter {
 
         }
 
+        @SuppressLint("ResourceAsColor")
         void bind(Task task) {
 
 
@@ -224,9 +234,9 @@ public class TaskAdapter extends RecyclerView.Adapter {
 
             int status = task.gettStatus();
             if (status == 0) {
-                taskstat.setBackgroundResource(R.drawable.taskundone);
+                taskstat.setBackgroundResource(R.color.ofline);
             } else {
-                taskstat.setBackgroundResource(R.drawable.taskdone);
+                taskstat.setBackgroundResource(R.color.online);
             }
 
             edittask.setOnClickListener(new View.OnClickListener() {
