@@ -59,6 +59,9 @@ public class TaskActivity extends AppCompatActivity implements  TaskAdapter.Task
 
     AlertDialog.Builder builder ;  AlertDialog alert ; //For deleting the Task card
 
+    int tidt =-1;
+    String ttile ="" ;
+
 
 
 
@@ -221,7 +224,7 @@ public class TaskActivity extends AppCompatActivity implements  TaskAdapter.Task
 
     /*
 
-    Alert dialog pop up setup for creating new Quest
+    Alert dialog pop up setup for creating new Task
 
      */
 
@@ -288,7 +291,82 @@ public class TaskActivity extends AppCompatActivity implements  TaskAdapter.Task
     }
 
 
+//Function to edit  task name
+    public void setEditTaskAllert() {
+        // get prompts.xml view
+        LayoutInflater li = LayoutInflater.from(context);
+        View promptsView = li.inflate(R.layout.prompts, null);
 
+        alertDialogBuilder = new AlertDialog.Builder(
+                context);
+
+        // set prompts.xml to alertdialog builder
+        alertDialogBuilder.setView(promptsView);
+
+        final EditText tTitle = (EditText) promptsView
+                .findViewById(R.id.editTextDialogUserInput);
+        TextView tt = (TextView) promptsView
+                .findViewById(R.id.msgal);
+        tt.setText("Edit Task Name : ");
+        tTitle.setText(ttile);
+        // set dialog message
+        alertDialogBuilder
+                .setCancelable(false)
+                .setPositiveButton("OK",
+                        new DialogInterface.OnClickListener() {
+                            @RequiresApi(api = Build.VERSION_CODES.O)
+                            public void onClick(DialogInterface dialog, int id) {
+                                LocalDateTime current = LocalDateTime.now();
+
+                               /* Use this formatter
+                                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
+                                String formatted = current.format(formatter);
+
+                                System.out.println("Current Date and Time is: " + formatted);
+
+
+                                */
+                                String newtitle = tTitle.getText().toString() ;
+                                if (newtitle.isEmpty()) {
+                                    //Do nothing
+
+                                }else {
+                                    //Update Quest title
+                                    myDataBaseHelper.updateTitle(tidt,newtitle) ;
+                                }
+                                tidt = -1 ;
+                                ttile = "" ;
+
+
+                            }
+                        })
+                .setNegativeButton("Cancel",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog,int id) {
+                                dialog.cancel();
+
+
+                            }
+                        });
+
+        alertDialogBuilder.setOnDismissListener(new DialogInterface.OnDismissListener()  {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                ((ViewGroup)promptsView.getParent()).removeView(promptsView);
+                refreshLayout() ;
+            }
+        });
+
+        // create alert dialog for Quest update
+        alertDialog = alertDialogBuilder.create();
+
+        // show it
+        alertDialog.show();
+        refreshLayout();
+
+
+
+    }
 
 /*
 
@@ -399,6 +477,11 @@ public class TaskActivity extends AppCompatActivity implements  TaskAdapter.Task
 
     @Override
     public void onTaskEdit(int index, ArrayList<Task> tasks) {
+        tidt = tasks.get(index).gettId() ;
+        ttile = tasks.get(index).gettTitle() ;
+
+        setEditTaskAllert() ;
+        refreshLayout();
 
     }
 

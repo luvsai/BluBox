@@ -485,6 +485,17 @@ public class dbhelper_blubox {
         return  count;
     }
 
+    //Update task title
+
+    public int updateTaskTitle(int tId , String tTitle)
+    {
+        SQLiteDatabase db = myhelper.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(myDbHelper.TTITLE,tTitle);
+        String[] whereArgs= {String.valueOf(tId)};
+        int count =db.update(myDbHelper.TASK_TABLE_NAME,contentValues, myDbHelper.TID+" = ?",whereArgs );
+        return count;
+    }
 
 
 

@@ -28,6 +28,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.blubox.R;
@@ -81,6 +82,7 @@ public class ToDoList extends AppCompatActivity implements  QuestAdapter.QuestCl
 
 
     int deleteQuestID = -1 ; //Used by delete Quest Functionality to Find which Quest to delete
+    String qtitle = "";
 
 
 
@@ -217,7 +219,7 @@ public class ToDoList extends AppCompatActivity implements  QuestAdapter.QuestCl
 
         final EditText qTitle = (EditText) promptsView
                 .findViewById(R.id.editTextDialogUserInput);
-
+        qTitle.setText("");
         // set dialog message
         alertDialogBuilder
                 .setCancelable(false)
@@ -262,6 +264,95 @@ public class ToDoList extends AppCompatActivity implements  QuestAdapter.QuestCl
 
 
     }
+
+
+
+
+    /*
+
+    Alert dialog pop up setup for Edinting existing Quest name
+
+     */
+
+    public void setEditTaskAllert() {
+        // get prompts.xml view
+        LayoutInflater li = LayoutInflater.from(context);
+        View promptsView = li.inflate(R.layout.prompts, null);
+
+        alertDialogBuilder = new AlertDialog.Builder(
+                context);
+
+        // set prompts.xml to alertdialog builder
+        alertDialogBuilder.setView(promptsView);
+
+        final EditText tTitle = (EditText) promptsView
+                .findViewById(R.id.editTextDialogUserInput);
+        TextView tt = (TextView) promptsView
+                .findViewById(R.id.msgal);
+        tt.setText("Edit Quest Name : ");
+        tTitle.setText(qtitle);
+
+        // set dialog message
+        alertDialogBuilder
+                .setCancelable(false)
+                .setPositiveButton("OK",
+                        new DialogInterface.OnClickListener() {
+                            @RequiresApi(api = Build.VERSION_CODES.O)
+                            public void onClick(DialogInterface dialog, int id) {
+                                LocalDateTime current = LocalDateTime.now();
+
+                               /* Use this formatter
+                                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
+                                String formatted = current.format(formatter);
+
+                                System.out.println("Current Date and Time is: " + formatted);
+
+
+                                */
+                                String newtitle = tTitle.getText().toString() ;
+                                if (newtitle.isEmpty()) {
+                                    //Do nothing
+
+                                }else {
+                                    //Update Quest title
+                                    myDataBaseHelper.updateTitle(deleteQuestID,newtitle) ;
+                                }
+                                deleteQuestID = -1 ;
+                                tTitle.setText("");
+                                qtitle =""  ;
+
+
+                            }
+                        })
+                .setNegativeButton("Cancel",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog,int id) {
+                                dialog.cancel();
+
+
+                            }
+                        });
+
+        alertDialogBuilder.setOnDismissListener(new DialogInterface.OnDismissListener()  {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                ((ViewGroup)promptsView.getParent()).removeView(promptsView);
+                refreshLayout() ;
+            }
+        });
+
+        // create alert dialog for Quest update
+        alertDialog = alertDialogBuilder.create();
+
+        // show it
+        alertDialog.show();
+        refreshLayout();
+
+
+
+    }
+
+
 
 
 
@@ -391,7 +482,11 @@ public class ToDoList extends AppCompatActivity implements  QuestAdapter.QuestCl
     @Override
     public void onQuestEdit(int index, ArrayList<Quest> quests) {
 
+        //Setting the update Quest id
+        deleteQuestID = quests.get(index).getqId() ;
+        qtitle = quests.get(index).getqTitle() ;
 
+        setEditTaskAllert() ;
 
 
         //Refresh layout
