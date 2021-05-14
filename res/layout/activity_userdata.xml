@@ -6,6 +6,8 @@
     android:layout_height="match_parent"
     tools:context=".Userdata">
 
+
+
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/addpic"
         android:layout_width="126dp"
@@ -14,14 +16,31 @@
         android:layout_alignParentTop="true"
         android:layout_gravity="center"
 
-        android:layout_marginTop="72dp"
-        android:src="@mipmap/ic_launcher_round"
+        android:layout_marginTop="80dp"
+        android:src="@drawable/logo"
         app:civ_border_color="@color/online"
         app:civ_border_width="3dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintHorizontal_bias="0.508"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/editimg"
+        android:layout_width="37dp"
+        android:layout_height="35dp"
+        android:layout_gravity="right"
+        android:layout_marginTop="152dp"
+        android:layout_marginEnd="116dp"
+        android:layout_weight="1"
+        android:background="@drawable/editpen"
+        android:backgroundTint="#0B0B0B"
+        android:contentDescription="TODO"
+        app:civ_border_color="@color/black"
+        app:civ_border_width="2dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@android:drawable/ic_input_add" />
 
     <TextView
         android:id="@+id/intro"

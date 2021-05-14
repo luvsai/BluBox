@@ -215,7 +215,6 @@ public class dbhelper_blubox {
         String[] columns = {myDbHelper.QID, myDbHelper.QTITLE,myDbHelper.QMSG,
                 myDbHelper.QIMG,myDbHelper.QTSTAMP, myDbHelper.QTASKCOUNT,
                 myDbHelper.QREACHED,myDbHelper.QSTATUS };
-
         Cursor cursor =db.query(myDbHelper.QUEST_TABLE_NAME,columns,null,null,null,null,null);
         StringBuffer buffer= new StringBuffer();
         while (cursor.moveToNext())
@@ -299,6 +298,25 @@ public class dbhelper_blubox {
             return  count;
         }
 
+        //GEt QuestTitle(QuestID)
+    public String getQuestsTitle(int qId)
+    {
+        String qTitle ="" ;
+        SQLiteDatabase db = myhelper.getWritableDatabase();
+        String[] columns = { myDbHelper.QTITLE};
+        String[] selArgs = {String.valueOf(qId)} ;
+
+        Cursor cursor =db.query(myDbHelper.QUEST_TABLE_NAME,columns,myDbHelper.QID+" = ?",selArgs,null,null,null);
+        StringBuffer buffer= new StringBuffer();
+        while (cursor.moveToNext())
+        {
+
+
+            qTitle =cursor.getString(cursor.getColumnIndex(myDbHelper.QTITLE));
+        }
+        cursor.close();
+        return qTitle;
+    }
 
 
 
@@ -364,6 +382,99 @@ public class dbhelper_blubox {
         }
         return tasks;
     }
+
+
+
+
+
+
+
+
+
+
+    //Get TasksCount with Quest Id
+
+    public int getTasksCount(int qId)
+    {
+        int tCount = 0 ;
+
+        SQLiteDatabase db = myhelper.getWritableDatabase();
+        String[] columns = {myDbHelper.TID ,myDbHelper.TSTATUS};
+        Cursor cursor =db.query(myDbHelper.TASK_TABLE_NAME,columns,"qId = ?", new String[] { String.valueOf(qId) },null,null,null);
+        StringBuffer buffer= new StringBuffer();
+
+        while (cursor.moveToNext())
+        {
+                tCount++;
+        }
+        return tCount;
+    }
+
+
+    //Get TasksCount with Quest Id
+
+    public int getTasksReachedCount(int qId)
+    {
+        int tRCount = 0 ;
+
+        SQLiteDatabase db = myhelper.getWritableDatabase();
+        String[] columns = {myDbHelper.TID ,myDbHelper.TSTATUS};
+        Cursor cursor =db.query(myDbHelper.TASK_TABLE_NAME,columns,"qId = ?", new String[] { String.valueOf(qId) },null,null,null);
+        StringBuffer buffer= new StringBuffer();
+
+        while (cursor.moveToNext())
+        {
+
+
+            int tStatus =cursor.getInt(cursor.getColumnIndex(myDbHelper.TSTATUS));
+
+            if ( tStatus  == 1) {
+                tRCount++;
+            }
+
+
+
+        }
+        return tRCount;
+    }
+
+
+
+
+
+    /*
+     *Function to  Update Task Status
+
+     */
+    public int updateTStatus(int tId , int tStatus )
+    {
+
+        SQLiteDatabase db = myhelper.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(myDbHelper.TSTATUS,tStatus); //new data
+        String[] whereArgs= {String.valueOf(tId)};
+        int count =db.update(myDbHelper.TASK_TABLE_NAME,contentValues, myDbHelper.TID+" = ?",whereArgs );
+        return count;
+    }
+
+    /*
+
+     * Function to delete the Task
+     */
+    public  int deleteTask(int tId)
+    {
+        SQLiteDatabase db = myhelper.getWritableDatabase();
+        String[] whereArgs ={String.valueOf(tId)};
+
+        int count =db.delete(myDbHelper.TASK_TABLE_NAME , myDbHelper.TID+" = ?",whereArgs);
+        return  count;
+    }
+
+
+
+
+
+
 
 
 

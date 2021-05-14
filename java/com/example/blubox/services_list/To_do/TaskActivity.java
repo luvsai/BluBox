@@ -1,61 +1,48 @@
 package com.example.blubox.services_list.To_do;
 
-import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.os.Build;
-import android.os.Bundle;
-
-import com.example.blubox.MainActivity;
-import com.example.blubox.ServiceAdapter;
-import com.example.blubox.SpeedyLinearLayoutManager;
-import com.example.blubox.databaseHelpers.dbhelper_blubox;
-import com.example.blubox.userbio;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
-
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.os.Build;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.example.blubox.R;
+import com.example.blubox.SpeedyLinearLayoutManager;
+import com.example.blubox.databaseHelpers.dbhelper_blubox;
+import com.example.blubox.userbio;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-
-
 
 /*
 
  *Documentation:------------------------------
 
-    *Name: ToDoList.java (Activity)
-          uses res/layout/activity_to_do_list.xml (Resource file for layout)
+    *Name: TaskActivity.java (Activity)
+          uses res/layout/activity_task.xml (Resource file for layout)
 
 
     *Description :-----------
-        ->It will display list of Quests (activities)
-        Each Quest can have 0 or more tasks assigned to it
-        -> User can create a new Quest with a title. or delete old ones
-        - when he clicks the activity card he  is redirted to the tasks activity for that specific activity
+        ->It will display list of Tasks
+        Each Task has an objective to complete
+        the user can mark and umark the task on completion vv
 
 
  */
 
-public class ToDoList extends AppCompatActivity implements  QuestAdapter.QuestClicked {
+
+
+
+
+public class TaskActivity extends AppCompatActivity implements  TaskAdapter.TaskClicked {
 
 
     dbhelper_blubox myDataBaseHelper ; //DATABASE helper
@@ -64,11 +51,11 @@ public class ToDoList extends AppCompatActivity implements  QuestAdapter.QuestCl
 
     final Context context = this;
 
-    ArrayList<Quest> quests ;
+    ArrayList<Task> tasks ;
 
-    AlertDialog.Builder alertDialogBuilder ;  AlertDialog alertDialog ; //For creating Quest Card
+    AlertDialog.Builder alertDialogBuilder ;  AlertDialog alertDialog ; //For creating Task Card
 
-    AlertDialog.Builder builder ;  AlertDialog alert ; //For deleting the Quest card
+    AlertDialog.Builder builder ;  AlertDialog alert ; //For deleting the Task card
 
 
 
@@ -79,8 +66,11 @@ public class ToDoList extends AppCompatActivity implements  QuestAdapter.QuestCl
     RecyclerView.LayoutManager layoutmanager;
     RecyclerView.Adapter myAdapter;
 
+    int qId = -1;
+    String qTitle ;
 
-    int deleteQuestID = -1 ; //Used by delete Quest Functionality to Find which Quest to delete
+
+    int deleteTaskID = -1 ; //Used by delete Task Functionality to Find which Task to delete
 
 
 
@@ -93,11 +83,24 @@ public class ToDoList extends AppCompatActivity implements  QuestAdapter.QuestCl
 
         getSupportActionBar().hide(); //Hiding Action BAr
 
-        setContentView(R.layout.activity_to_do_list);
+        setContentView(R.layout.activity_task);
+
+        try {
+
+            //Getting Quest Id from the intent data
+            qId = Integer.parseInt(getIntent().getStringExtra("qId"));
+
+
+            //Getting Quest Title from the intent data
+            qTitle = getIntent().getStringExtra("qTitle");
+
+        }catch (Exception e) {
+
+        }
 
 
         /*
-        Creating the DataBase helper object to manage the Quest cards Functionality
+        Creating the DataBase helper object to manage the Tasks cards Functionality
 
          */
 
@@ -105,14 +108,14 @@ public class ToDoList extends AppCompatActivity implements  QuestAdapter.QuestCl
 
 
 
-        quests = new ArrayList<Quest>(); //creating quests object
+        tasks = new ArrayList<Task>(); //creating tasks object
 
 
 
-        // calling : setCreateQuestAllert() ;  to Configure the Create Quest alert Box
-        setCreateQuestAllert() ;
+        // calling : setCreateQuestAllert() ;  to Configure the Create Task alert Box
+        setCreateTaskAllert() ;
 
-        // calling : setDeleteAllert()  to Configure the Delete Quest alert Box
+        // calling : setDeleteAllert()  to Configure the Delete Task alert Box
         setDeleteAllert() ;
 
 
@@ -126,21 +129,21 @@ public class ToDoList extends AppCompatActivity implements  QuestAdapter.QuestCl
 
         /*
 
-        Code for recycler view for Quest Activity Display
+        Code for recycler view for Task Activity Display
 
          */
 
-        recyclerView = findViewById(R.id.Qlist); //in content_to_do_list.xml
+        recyclerView = findViewById(R.id.Tlist); //in content_to_do_list.xml
         recyclerView.setHasFixedSize(true);
 
         //for vertical scrolling
-        recyclerView.setLayoutManager(new SpeedyLinearLayoutManager(ToDoList.this, SpeedyLinearLayoutManager.VERTICAL, false) );
+        recyclerView.setLayoutManager(new SpeedyLinearLayoutManager(TaskActivity.this, SpeedyLinearLayoutManager.VERTICAL, false) );
         registerForContextMenu(recyclerView);
 
 
 
         // creating adapter object with the services data
-        myAdapter = new QuestAdapter(quests, ToDoList.this);
+        myAdapter = new TaskAdapter(tasks, TaskActivity.this);
 
         recyclerView.setAdapter(myAdapter); //sending the adapter to recyclerView
 
@@ -163,22 +166,35 @@ public class ToDoList extends AppCompatActivity implements  QuestAdapter.QuestCl
 
     void refreshLayout() {
 
-        quests.clear(); //clearing the list
+        tasks.clear(); //clearing the list
 
-        userbio dat = new userbio(ToDoList.this);
+        userbio dat = new userbio(TaskActivity.this);
         String profileUrl = dat.getPhoto() ; //Profile pic Uri
 
 
+        qTitle = myDataBaseHelper.getQuestsTitle(qId);
+
+        //Calculate the percent of tasks completed
+
+        int taskcount , taskreached ;
+
+        taskcount = myDataBaseHelper.getTasksCount(qId) ;
+        taskreached = myDataBaseHelper.getTasksReachedCount(qId) ;
+        int percent = (taskcount - taskreached) / taskcount ;
+
+        //
+
+
         //Add the Quest Intro Card data  Displaying the Quest Activity info card at top
-        quests.add(new Quest(-1,"","",profileUrl,"",0,0,0)) ;
+        tasks.add(new Task(-1,qId,qTitle,"",percent,profileUrl));
 
 
         //Get the data from the Database and append it to the Arrya list
-        quests.addAll(myDataBaseHelper.getQuestsData());
+        tasks.addAll(myDataBaseHelper.getTasksData(qId));
 
 
         // creating adapter object with the services data
-        myAdapter = new QuestAdapter(quests, ToDoList.this);
+        myAdapter = new TaskAdapter(tasks, TaskActivity.this);
 
         recyclerView.setAdapter(myAdapter); //sending the adapter to recyclerView
 
@@ -204,7 +220,7 @@ public class ToDoList extends AppCompatActivity implements  QuestAdapter.QuestCl
 
      */
 
-    public void setCreateQuestAllert() {
+    public void setCreateTaskAllert() {
         // get prompts.xml view
         LayoutInflater li = LayoutInflater.from(context);
         View promptsView = li.inflate(R.layout.prompts, null);
@@ -215,7 +231,7 @@ public class ToDoList extends AppCompatActivity implements  QuestAdapter.QuestCl
         // set prompts.xml to alertdialog builder
         alertDialogBuilder.setView(promptsView);
 
-        final EditText qTitle = (EditText) promptsView
+        final EditText tTitle = (EditText) promptsView
                 .findViewById(R.id.editTextDialogUserInput);
 
         // set dialog message
@@ -235,10 +251,8 @@ public class ToDoList extends AppCompatActivity implements  QuestAdapter.QuestCl
 
 
                                 */
-                                myDataBaseHelper.insertQuestData(qTitle.getText().toString(),"","",current.toString(),0,0,0);
-                                // get user input and set it to result
-                                // edit text
-                                //result.setText(userInput.getText());
+                                myDataBaseHelper.insertTaskData(qId,current.toString(),tTitle.getText().toString(),0,"");
+
                             }
                         })
                 .setNegativeButton("Cancel",
@@ -302,10 +316,10 @@ public class ToDoList extends AppCompatActivity implements  QuestAdapter.QuestCl
                             public void onClick(DialogInterface dialog, int id) {
 
 
-                                myDataBaseHelper.delete(deleteQuestID) ;
+                                myDataBaseHelper.deleteTask(deleteTaskID) ;
 
                                 //Unseting global QuestdeleteId
-                                deleteQuestID = -1 ;
+                                deleteTaskID = -1 ;
                             }
                         })
                 .setNegativeButton("Cancel",
@@ -343,38 +357,15 @@ public class ToDoList extends AppCompatActivity implements  QuestAdapter.QuestCl
 
     /*
 
-            *Functions implementation of the Quest adapter Class
+     *Functions implementation of the Task adapter Class
 
 
      */
 
-    @Override
-    public void onQuestClicked(int index, ArrayList<Quest> quests) {
-        int qId = quests.get(index).getqId() ;
-        String qTitle = quests.get(index).getqTitle() ;
 
-        /*
-        Directs the uer to respectiv activity
-         */
-
-        String TaskActivityPath = "com.example.blubox.services_list.To_do.TaskActivity" ;
-        Intent i = null;
-        try {
-            i = new Intent(ToDoList.this, Class.forName(TaskActivityPath));
-            i.putExtra("qId",qId);
-            i.putExtra("qTitle",qTitle);
-            startActivity(i);
-
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-            return ;
-        }
-
-    }
 
     @Override
-    public void onQuestCreate(int index, ArrayList<Quest> quests) {
-
+    public void onTaskCreate(int index, ArrayList<Task> tasks) {
 
         // create alert dialog for Quest create
         alertDialog = alertDialogBuilder.create();
@@ -389,20 +380,15 @@ public class ToDoList extends AppCompatActivity implements  QuestAdapter.QuestCl
     }
 
     @Override
-    public void onQuestEdit(int index, ArrayList<Quest> quests) {
+    public void onTaskEdit(int index, ArrayList<Task> tasks) {
 
-
-
-
-        //Refresh layout
-        refreshLayout();
     }
 
     @Override
-    public void onQuestDelete(int index, ArrayList<Quest> quests) {
+    public void onTaskDelete(int index, ArrayList<Task> tasks) {
 
-        //Setting the delete Quest id
-        deleteQuestID = quests.get(index).getqId() ;
+        //Setting the delete TaskID id
+        deleteTaskID = tasks.get(index).gettId() ;
 
 
         alert = builder.create();
@@ -410,24 +396,15 @@ public class ToDoList extends AppCompatActivity implements  QuestAdapter.QuestCl
 
         //Refresh layout
         refreshLayout();
+
+
+    }
+
+    @Override
+    public void onTaskClicked(int index, ArrayList<Task> tasks) {
+
     }
 }
 
 
 
-
-
-//--------------------
-/*
-
-         // View parentLayout = findViewById(android.R.id.content);
-        fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_SHORT)
-                        .setAction("Action", null).show();
-            }
-        });
-
- */

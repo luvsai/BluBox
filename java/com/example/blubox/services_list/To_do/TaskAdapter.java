@@ -7,23 +7,22 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.blubox.R;
-import com.example.blubox.Service;
 
 import java.util.ArrayList;
-
 
 
 /*
 
  *Documentation:------------------------------
 
-    *Name: QuestAdapter.java (helper class)
+    *Name: TaskAdapter.java (helper class)
          uses to dynamically link data with the UI view components
 
          it consists seperate Viewholder classes for various View templates
@@ -31,13 +30,13 @@ import java.util.ArrayList;
 
 
 
-public class QuestAdapter extends RecyclerView.Adapter {
-    QuestClicked context;
+public class TaskAdapter extends RecyclerView.Adapter {
+    TaskClicked context;
     int id;
 
 
     //Definining ids for the different layout cards
-    private static final int QUEST = 1;
+    private static final int TASK = 1;
     private static final int INTRO = 0;
 
 
@@ -46,24 +45,24 @@ public class QuestAdapter extends RecyclerView.Adapter {
         contains functions implemented by MainActivity and function call by methods inside adapter
 
      */
-    public interface QuestClicked {
-        void onQuestClicked(int index, ArrayList<Quest> quests);
-        void onQuestCreate(int index, ArrayList<Quest> quests) ;
-        void onQuestEdit(int index, ArrayList<Quest> quests)   ;
-        void onQuestDelete(int index, ArrayList<Quest> quests) ;
+    public interface TaskClicked {
+        void onTaskCreate(int index, ArrayList<Task> tasks) ;
+        void onTaskEdit(int index, ArrayList<Task> tasks)   ;
+        void onTaskDelete(int index, ArrayList<Task> tasks) ;
+        void onTaskClicked(int index, ArrayList<Task> tasks) ;
 
     }
 
 
-    ArrayList<Quest> quests ;
+    ArrayList<Task> tasks ;
 
     /*
     Constructor for the ServiceAdapter Class
      */
 
-    public QuestAdapter( ArrayList<Quest> quests  , Context context) {
-        this.quests  = quests ;
-        this.context = (QuestClicked) context;
+    public TaskAdapter( ArrayList<Task> tasks  , Context context) {
+        this.tasks = tasks ;
+        this.context = (TaskClicked) context;
     }
 
 
@@ -72,14 +71,14 @@ public class QuestAdapter extends RecyclerView.Adapter {
     // Determines the appropriate ViewType whether the layout for the recycler item is Userbio card(USER) or service card (SERVICE) return the value
     @Override
     public int getItemViewType(int position) {
-        Quest card = (Quest) quests.get(position);
+        Task card = (Task) tasks.get(position);
 
-        if (card.getqId() == -1) {
-            // If the card is for displaying QUESTINTRO
+        if (card.gettId() == -1) {
+            // If the card is for displaying TaskINTRO
             return INTRO;
         } else {
-            // If card is used for diplaying QUESTS
-            return QUEST;
+            // If card is used for diplaying Tasks
+            return TASK;
         }
     }
 
@@ -98,12 +97,12 @@ public class QuestAdapter extends RecyclerView.Adapter {
 
         if (viewType == INTRO) {
             view = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.quest_intro_template, parent, false);
+                    .inflate(R.layout.task_intro, parent, false);
             return new IntroHolder(view);
-        } else if (viewType == QUEST) {
+        } else if (viewType == TASK) {
             view = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.quest_card_template, parent, false);
-            return new QuestHolder(view);
+                    .inflate(R.layout.task_card_template, parent, false);
+            return new TaskHolder(view);
         }
         return null;
     }
@@ -114,7 +113,7 @@ public class QuestAdapter extends RecyclerView.Adapter {
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
         id = i;
         View v;
-        viewHolder.itemView.setTag(quests.get(i));
+        viewHolder.itemView.setTag(tasks.get(i));
         viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -122,13 +121,13 @@ public class QuestAdapter extends RecyclerView.Adapter {
             }
         });
 
-        Quest quest= quests.get(i);
+        Task task = tasks.get(i);
         switch (viewHolder.getItemViewType()) {
             case INTRO:
-                ((IntroHolder) viewHolder).bind(quest);
+                ((IntroHolder) viewHolder).bind(task);
                 break;
-            case QUEST:
-                ((QuestHolder) viewHolder).bind(quest);
+            case TASK:
+                ((TaskHolder) viewHolder).bind(task);
         }
     }
 
@@ -144,36 +143,39 @@ public class QuestAdapter extends RecyclerView.Adapter {
 
     private class IntroHolder extends RecyclerView.ViewHolder  {
         View itemView;
-        ImageButton createquest;
-        ImageView qprofilepic;
+        ImageButton createtask;
+        ImageView tprofilepic;
+        ProgressBar taskprogress;
 
         IntroHolder(View itemView) {
             super(itemView);
 
             this.itemView = itemView;
-            createquest = itemView.findViewById(R.id.createquest);
-            qprofilepic = itemView.findViewById(R.id.qprofilepic);
-
+            createtask = itemView.findViewById(R.id.creatask);
+            tprofilepic = itemView.findViewById(R.id.tprofilepic);
+            taskprogress =  (ProgressBar) itemView.findViewById(R.id.progressBar) ;
 
         }
 
-        void bind(Quest quest) {
-            itemView.setTag(quest);
+        void bind(Task task) {
+            itemView.setTag(task);
+
+            taskprogress.setProgress(task.gettStatus());
 
 
-            if(quest.getqImg().isEmpty()) {
+            if(task.getTemp().isEmpty()) {
 
             }else {
-                qprofilepic.setImageURI(Uri.parse(quest.getqImg()));
+                tprofilepic.setImageURI(Uri.parse(task.getTemp()));
             }
 
 
             //Function call to create a new quest
 
-            createquest.setOnClickListener(new View.OnClickListener() {
+            createtask.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    context.onQuestCreate(quests.indexOf(quest),quests);
+                    context.onTaskCreate(tasks.indexOf(task),tasks);
                 }
             });
         }
@@ -192,58 +194,62 @@ public class QuestAdapter extends RecyclerView.Adapter {
      */
 
 
-    private class QuestHolder extends RecyclerView.ViewHolder  {
-        TextView questname , total, done , waytogo;
+    private class TaskHolder extends RecyclerView.ViewHolder  {
+        TextView taskname ;
+        ImageView taskstat ;
 
-        ImageButton deletequest, editquest;
+
+        ImageButton deletetask, edittask;
 
         View itemView;
-        QuestHolder(View itemView) {
+        TaskHolder(View itemView) {
             super(itemView);
             this.itemView = itemView;
 
-            questname =  itemView.findViewById(R.id.questname);
-            total  =  itemView.findViewById(R.id.total);
-            done  =  itemView.findViewById(R.id.done);
-            waytogo  =  itemView.findViewById(R.id.waytogo);
+            taskname =  itemView.findViewById(R.id.taskname);
+            taskstat =  itemView.findViewById(R.id.taskStat);
 
-            deletequest =  itemView.findViewById(R.id.deletequest);
-            editquest =  itemView.findViewById(R.id.editquest);
+            deletetask =  itemView.findViewById(R.id.deletetask);
+            edittask =  itemView.findViewById(R.id.renametask);
 
 
         }
 
-        void bind(Quest quest) {
+        void bind(Task task) {
 
 
-            itemView.setTag(quest);
-            questname.setText(quest.getqTitle());
-            total.setText(String.valueOf(quest.getqTaskCount()));
-            done.setText(String.valueOf(quest.getqReached()));
-            int unfinish  =  quest.getqTaskCount() - quest.getqReached() ;
-            waytogo.setText(String.valueOf(unfinish));
+            itemView.setTag(task);
+            taskname.setText(task.gettTitle());
 
-            editquest.setOnClickListener(new View.OnClickListener() {
+
+            int status = task.gettStatus();
+            if (status == 0) {
+                taskstat.setBackgroundResource(R.drawable.taskundone);
+            } else {
+                taskstat.setBackgroundResource(R.drawable.taskdone);
+            }
+
+            edittask.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    context.onQuestEdit(quests.indexOf(quest),quests);
+                    context.onTaskEdit(tasks.indexOf(task),tasks);
                 }
             });
 
-            deletequest.setOnClickListener(new View.OnClickListener() {
+            deletetask.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    context.onQuestDelete(quests.indexOf(quest),quests);
+                    context.onTaskDelete(tasks.indexOf(task),tasks);
                 }
             });
+
+
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    context.onQuestClicked(quests.indexOf(quest),quests);
+                        context.onTaskClicked(tasks.indexOf(task),tasks);
                 }
             });
-
-
 
 
         }
@@ -255,7 +261,7 @@ public class QuestAdapter extends RecyclerView.Adapter {
      */
     @Override
     public int getItemCount() {
-        return quests.size();
+        return tasks.size();
     }
 
 

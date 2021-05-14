@@ -24,7 +24,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#55AEEA"
+            android:background="#B5A8FF"
 
             android:orientation="vertical">
 
@@ -35,7 +35,7 @@
                 android:orientation="horizontal">
 
                 <de.hdodenhof.circleimageview.CircleImageView
-                    android:id="@+id/qprofilepic"
+                    android:id="@+id/tprofilepic"
                     android:layout_width="70dp"
                     android:layout_height="70dp"
                     android:layout_alignParentLeft="true"
@@ -49,13 +49,26 @@
                     app:civ_border_color="@color/online"
                     app:civ_border_width="3dp" />
 
-                <ImageView
-                    android:id="@+id/imageView2"
-                    android:layout_width="329dp"
-                    android:layout_height="85dp"
-                    app:srcCompat="@drawable/questlogo" />
+                <TextView
+                    android:id="@+id/uname"
+                    android:layout_width="151dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="30dp"
+                    android:text="whatss Up!!"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+
             </LinearLayout>
 
+
+            <ProgressBar
+                android:id="@+id/progressBar"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#FFFFFF" />
 
             <LinearLayout
                 android:id="@+id/dfs"
@@ -87,7 +100,7 @@
                         android:orientation="horizontal">
 
                         <TextView
-                            android:id="@+id/quote"
+                            android:id="@+id/questitle"
                             android:layout_width="310dp"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="5dp"
@@ -95,7 +108,7 @@
                             android:paddingLeft="2dp"
                             android:paddingTop="5dp"
                             android:text="This is my Quest to become the Star 🌟"
-                            android:textAlignment="textEnd"
+
                             android:textColor="#3C3C3C"
                             android:textSize="14sp"
                             android:textStyle="bold" />
@@ -121,14 +134,14 @@
                     android:layout_marginTop="15dp"
                     android:layout_marginEnd="10dp"
                     android:gravity="right"
-                    android:text="Create Quest"
-                    app:layout_constraintEnd_toStartOf="@+id/createquest"
+                    android:text="Add task"
+                    app:layout_constraintEnd_toStartOf="@+id/creatask"
                     app:layout_constraintHorizontal_bias="1.0"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <ImageButton
-                    android:id="@+id/createquest"
+                    android:id="@+id/creatask"
                     android:layout_width="40dp"
                     android:layout_height="30dp"
                     android:layout_marginEnd="25dp"
