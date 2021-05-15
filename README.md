@@ -18,6 +18,10 @@
       To share quests to friends ... and having fun completing them
       
  2.Remaing features are under development
+
+
+
+Thank you Sofia(my cute lappy) and baby for helping me. 
  
  
  
