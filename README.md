@@ -19,6 +19,15 @@
       
  2.Remaing features are under development
 
+Techinical :
+list of android concepts applied 
+ 1. Android splash screen animations.
+ 2. android user interface design to take form inputs.
+ 3. Android intents.
+ 4. Android Recycler View with multiple view holder classes
+ 5. Android Sqlite  databases and created helper class and functions to create access and update the database and tables.
+ 6. integrating android Gui and code and databases.
+ 
 
 
 Thank you Sofia(my cute lappy) and baby for helping me. 
