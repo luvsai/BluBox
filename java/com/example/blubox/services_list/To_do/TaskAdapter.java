@@ -165,7 +165,7 @@ public class TaskAdapter extends RecyclerView.Adapter {
 
             taskprogress.setProgress(task.gettStatus());
 
-            ttitle.setText(task.gettTitle() + " ("+String.valueOf(task.gettStatus())+ ")" );
+            ttitle.setText(task.gettTitle() + " ( "+String.valueOf(task.gettStatus())+ "% )" );
 
             String temp ;
             temp = uname.getText().toString() ;
